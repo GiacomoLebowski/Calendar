@@ -117,6 +117,10 @@
                 const inputPassword = document.getElementById('password').value;
                 const errorMessage = document.getElementById('error-message');
 
+                // Debugging output
+                console.log("Stored Password: ", storedPassword);
+                console.log("Input Password: ", inputPassword);
+
                 if (inputPassword === storedPassword) {
                     document.getElementById('login-container').style.display = 'none';
                     showContent();
