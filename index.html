@@ -3,36 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina protetta</title>
+    <title>Pagina madre con contenuti incorporati</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
-        }
-        #login-container, #setup-container {
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
-            background-color: #ffffff;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            justify-content: center;
         }
-        input[type="password"], input[type="text"], input[type="url"] {
-            margin-bottom: 15px;
+        #content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .iframe-container {
+            width: 100%;
+            height: 400px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .edit-controls {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        input[type="text"], input[type="url"] {
+            margin: 5px;
             padding: 10px;
             font-size: 1em;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 100%;
+            width: 45%;
+            max-width: 400px;
+            box-sizing: border-box;
         }
         button {
             padding: 10px 20px;
@@ -43,200 +64,84 @@
             border-radius: 5px;
             cursor: pointer;
             margin: 5px;
+            box-sizing: border-box;
         }
         button:hover {
             background-color: #0056b3;
         }
-        #content {
-            display: none; /* Nasconde il contenuto protetto finché non viene inserita la password */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
+
+        /* Responsive design */
+        @media (min-width: 600px) {
+            #content {
+                grid-template-columns: 1fr 1fr;
+            }
+            .iframe-container {
+                height: 450px;
+            }
         }
-        .link-box {
-            width: auto;
-            max-width: 400px;
-            padding: 10px;
-            margin: 10px;
-            background-color: #ffffff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
+
+        @media (min-width: 900px) {
+            #content {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+            .iframe-container {
+                height: 500px;
+            }
         }
-        .link-box a {
-            text-decoration: none;
-            color: #007BFF;
-            font-size: 1.2em;
-            display: block;
-            margin-bottom: 10px;
-        }
-        .edit-controls {
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
+
+        @media (min-width: 1200px) {
+            #content {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+            .iframe-container {
+                height: 550px;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="setup-container" class="hidden">
-        <h2>Imposta la tua password</h2>
-        <input type="password" id="new-password" placeholder="Nuova password">
-        <button onclick="setPassword()">Imposta Password</button>
-    </div>
-
-    <div id="login-container" class="hidden">
-        <h2>Inserisci la password</h2>
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="checkPassword()">Accedi</button>
-        <p id="error-message" style="color: red; display: none;">Password errata. Riprova.</p>
-    </div>
-
     <div id="content">
-        <!-- Qui inizia il contenuto della tua pagina protetta -->
-        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-            <button id="edit-button">Modifica</button>
-            <button id="background-button">Cambia Sfondo</button>
+        <div class="iframe-container">
+            <iframe src="https://www.google.com"></iframe>
         </div>
-        
-        <div id="links-container">
-            <div class="link-box">
-                <a href="https://www.google.com" target="_blank">Google</a>
-                <button class="delete-button" onclick="removeLink(this)">Elimina</button>
-            </div>
-            <div class="link-box">
-                <a href="https://www.youtube.com" target="_blank">YouTube</a>
-                <button class="delete-button" onclick="removeLink(this)">Elimina</button>
-            </div>
-            <div class="link-box">
-                <a href="https://www.facebook.com" target="_blank">Facebook</a>
-                <button class="delete-button" onclick="removeLink(this)">Elimina</button>
-            </div>
-            <div class="link-box">
-                <a href="https://www.amazon.com" target="_blank">Amazon</a>
-                <button class="delete-button" onclick="removeLink(this)">Elimina</button>
-            </div>
+        <div class="iframe-container">
+            <iframe src="https://www.youtube.com"></iframe>
         </div>
-
-        <div class="edit-controls" id="edit-controls">
-            <input type="text" id="link-name" placeholder="Nome del sito">
-            <input type="url" id="link-url" placeholder="URL del sito">
-            <button onclick="addLink()">Aggiungi Riquadro</button>
+        <div class="iframe-container">
+            <iframe src="https://www.facebook.com"></iframe>
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
-        <script>
-            const PASSWORD_KEY = 'pagePassword';
-
-            function showSetup() {
-                document.getElementById('setup-container').classList.remove('hidden');
-            }
-
-            function showLogin() {
-                document.getElementById('login-container').classList.remove('hidden');
-            }
-
-            function showContent() {
-                document.getElementById('content').style.display = 'flex';
-            }
-
-            function checkPassword() {
-                const storedPassword = localStorage.getItem(PASSWORD_KEY);
-                const inputPassword = document.getElementById('password').value;
-                const errorMessage = document.getElementById('error-message');
-
-                // Debugging output
-                console.log("Stored Password: ", storedPassword);
-                console.log("Input Password: ", inputPassword);
-
-                if (inputPassword === storedPassword) {
-                    document.getElementById('login-container').style.display = 'none';
-                    showContent();
-                } else {
-                    errorMessage.style.display = 'block';
-                }
-            }
-
-            function setPassword() {
-                const newPassword = document.getElementById('new-password').value;
-                if (newPassword) {
-                    localStorage.setItem(PASSWORD_KEY, newPassword);
-                    document.getElementById('setup-container').style.display = 'none';
-                    showContent();
-                }
-            }
-
-            window.onload = function() {
-                if (localStorage.getItem(PASSWORD_KEY)) {
-                    showLogin();
-                } else {
-                    showSetup();
-                }
-            };
-
-            const editButton = document.getElementById('edit-button');
-            const backgroundButton = document.getElementById('background-button');
-            const editControls = document.getElementById('edit-controls');
-            let editMode = false;
-
-            editButton.addEventListener('click', () => {
-                editMode = !editMode;
-                editControls.style.display = editMode ? 'block' : 'none';
-                const deleteButtons = document.querySelectorAll('.delete-button');
-                deleteButtons.forEach(button => {
-                    button.style.display = editMode ? 'inline-block' : 'none';
-                });
-            });
-
-            backgroundButton.addEventListener('click', () => {
-                const newColor = prompt("Inserisci un colore di sfondo (es. #f0f0f0 o 'red'):");
-                if (newColor) {
-                    document.body.style.backgroundColor = newColor;
-                }
-            });
-
-            function addLink() {
-                const name = document.getElementById('link-name').value;
-                const url = document.getElementById('link-url').value;
-
-                if (name && url) {
-                    const linksContainer = document.getElementById('links-container');
-
-                    const newLinkBox = document.createElement('div');
-                    newLinkBox.classList.add('link-box');
-
-                    const newLink = document.createElement('a');
-                    newLink.href = url;
-                    newLink.target = '_blank';
-                    newLink.textContent = name;
-
-                    const deleteButton = document.createElement('button');
-                    deleteButton.classList.add('delete-button');
-                    deleteButton.textContent = 'Elimina';
-                    deleteButton.onclick = function() {
-                        removeLink(deleteButton);
-                    };
-
-                    newLinkBox.appendChild(newLink);
-                    newLinkBox.appendChild(deleteButton);
-                    linksContainer.appendChild(newLinkBox);
-
-                    document.getElementById('link-name').value = '';
-                    document.getElementById('link-url').value = '';
-                }
-            }
-
-            function removeLink(button) {
-                const linkBox = button.parentElement;
-                linkBox.remove();
-            }
-
-            // Inizializza Sortable.js per consentire il drag-and-drop dei riquadri
-            const sortable = new Sortable(document.getElementById('links-container'), {
-                animation: 150,
-                ghostClass: 'sortable-ghost',
-            });
-        </script>
+        <div class="iframe-container">
+            <iframe src="https://www.amazon.com"></iframe>
+        </div>
     </div>
-</body
+
+    <div class="edit-controls" id="edit-controls">
+        <input type="text" id="link-name" placeholder="Nome del sito">
+        <input type="url" id="link-url" placeholder="URL del sito">
+        <button onclick="addIframe()">Aggiungi Pagina</button>
+    </div>
+
+    <script>
+        function addIframe() {
+            const name = document.getElementById('link-name').value;
+            const url = document.getElementById('link-url').value;
+
+            if (name && url) {
+                const contentContainer = document.getElementById('content');
+
+                const iframeContainer = document.createElement('div');
+                iframeContainer.classList.add('iframe-container');
+
+                const iframe = document.createElement('iframe');
+                iframe.src = url;
+
+                iframeContainer.appendChild(iframe);
+                contentContainer.appendChild(iframeContainer);
+
+                document.getElementById('link-name').value = '';
+                document.getElementById('link-url').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
