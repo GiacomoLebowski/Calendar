@@ -9,6 +9,7 @@
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -23,8 +24,9 @@
             border: 2px solid #ccc;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
-        input[type="password"], input[type="text"] {
+        input[type="password"], input[type="text"], input[type="url"] {
             margin-bottom: 15px;
             padding: 10px;
             font-size: 1em;
@@ -40,15 +42,40 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin: 5px;
         }
         button:hover {
             background-color: #0056b3;
         }
         #content {
             display: none; /* Nasconde il contenuto protetto finché non viene inserita la password */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
         }
-        .hidden {
-            display: none;
+        .link-box {
+            width: auto;
+            max-width: 400px;
+            padding: 10px;
+            margin: 10px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .link-box a {
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .edit-controls {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
         }
     </style>
 </head>
@@ -68,8 +95,10 @@
 
     <div id="content">
         <!-- Qui inizia il contenuto della tua pagina protetta -->
-        <button id="edit-button">Modifica</button>
-        <button id="background-button">Cambia Sfondo</button>
+        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+            <button id="edit-button">Modifica</button>
+            <button id="background-button">Cambia Sfondo</button>
+        </div>
         
         <div id="links-container">
             <div class="link-box">
@@ -109,7 +138,7 @@
             }
 
             function showContent() {
-                document.getElementById('content').style.display = 'block';
+                document.getElementById('content').style.display = 'flex';
             }
 
             function checkPassword() {
@@ -210,5 +239,4 @@
             });
         </script>
     </div>
-</body>
-</html>
+</body
