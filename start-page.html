@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina protetta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #login-container input[type="password"] {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+        #login-container button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #007BFF;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #login-container button:hover {
+            background-color: #0056b3;
+        }
+        #content {
+            display: none; /* Nasconde il contenuto protetto finché non viene inserita la password */
+        }
+    </style>
+</head>
+<body>
+    <div id="login-container">
+        <h2>Inserisci la password</h2>
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="checkPassword()">Accedi</button>
+        <p id="error-message" style="color: red; display: none;">Password errata. Riprova.</p>
+    </div>
+
+    <div id="content">
+        <!-- Qui inizia il contenuto della tua pagina protetta -->
+        <button id="edit-button">Modifica</button>
+        <button id="background-button">Cambia Sfondo</button>
+        
+        <div id="links-container">
+            <div class="link-box">
+                <a href="https://www.google.com" target="_blank">Google</a>
+                <button class="delete-button" onclick="removeLink(this)">Elimina</button>
+            </div>
+            <div class="link-box">
+                <a href="https://www.youtube.com" target="_blank">YouTube</a>
+                <button class="delete-button" onclick="removeLink(this)">Elimina</button>
+            </div>
+            <div class="link-box">
+                <a href="https://www.facebook.com" target="_blank">Facebook</a>
+                <button class="delete-button" onclick="removeLink(this)">Elimina</button>
+            </div>
+            <div class="link-box">
+                <a href="https://www.amazon.com" target="_blank">Amazon</a>
+                <button class="delete-button" onclick="removeLink(this)">Elimina</button>
+            </div>
+        </div>
+
+        <div class="edit-controls" id="edit-controls">
+            <input type="text" id="link-name" placeholder="Nome del sito">
+            <input type="url" id="link-url" placeholder="URL del sito">
+            <button onclick="addLink()">Aggiungi Riquadro</button>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+        <script>
+            const PASSWORD = "password123"; // Definisci qui la tua password
+
+            function checkPassword() {
+                const inputPassword = document.getElementById('password').value;
+                const errorMessage = document.getElementById('error-message');
+                if (inputPassword === PASSWORD) {
+                    document.getElementById('login-container').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+                } else {
+                    errorMessage.style.display = 'block';
+                }
+            }
+
+            const editButton = document.getElementById('edit-button');
+            const backgroundButton = document.getElementById('background-button');
+            const editControls = document.getElementById('edit-controls');
+            let editMode = false;
+
+            editButton.addEventListener('click', () => {
+                editMode = !editMode;
+                editControls.style.display = editMode ? 'block' : 'none';
+                const deleteButtons = document.querySelectorAll('.delete-button');
+                deleteButtons.forEach(button => {
+                    button.style.display = editMode ? 'inline-block' : 'none';
+                });
+            });
+
+            backgroundButton.addEventListener('click', () => {
+                const newColor = prompt("Inserisci un colore di sfondo (es. #f0f0f0 o 'red'):");
+                if (newColor) {
+                    document.body.style.backgroundColor = newColor;
+                }
+            });
+
+            function addLink() {
+                const name = document.getElementById('link-name').value;
+                const url = document.getElementById('link-url').value;
+
+                if (name && url) {
+                    const linksContainer = document.getElementById('links-container');
+
+                    const newLinkBox = document.createElement('div');
+                    newLinkBox.classList.add('link-box');
+
+                    const newLink = document.createElement('a');
+                    newLink.href = url;
+                    newLink.target = '_blank';
+                    newLink.textContent = name;
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('delete-button');
+                    deleteButton.textContent = 'Elimina';
+                    deleteButton.onclick = function() {
+                        removeLink(deleteButton);
+                    };
+
+                    newLinkBox.appendChild(newLink);
+                    newLinkBox.appendChild(deleteButton);
+                    linksContainer.appendChild(newLinkBox);
+
+                    document.getElementById('link-name').value = '';
+                    document.getElementById('link-url').value = '';
+                }
+            }
+
+            function removeLink(button) {
+                const linkBox = button.parentElement;
+                linkBox.remove();
+            }
+
+            // Inizializza Sortable.js per consentire il drag-and-drop dei riquadri
+            const sortable = new Sortable(document.getElementById('links-container'), {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+            });
+        </script>
+    </div>
+</body>
+</html>
