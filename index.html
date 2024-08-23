@@ -47,16 +47,19 @@
         #content {
             display: none; /* Nasconde il contenuto protetto finché non viene inserita la password */
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div id="setup-container" style="display:none;">
+    <div id="setup-container" class="hidden">
         <h2>Imposta la tua password</h2>
         <input type="password" id="new-password" placeholder="Nuova password">
         <button onclick="setPassword()">Imposta Password</button>
     </div>
 
-    <div id="login-container">
+    <div id="login-container" class="hidden">
         <h2>Inserisci la password</h2>
         <input type="password" id="password" placeholder="Password">
         <button onclick="checkPassword()">Accedi</button>
@@ -97,6 +100,18 @@
         <script>
             const PASSWORD_KEY = 'pagePassword';
 
+            function showSetup() {
+                document.getElementById('setup-container').classList.remove('hidden');
+            }
+
+            function showLogin() {
+                document.getElementById('login-container').classList.remove('hidden');
+            }
+
+            function showContent() {
+                document.getElementById('content').style.display = 'block';
+            }
+
             function checkPassword() {
                 const storedPassword = localStorage.getItem(PASSWORD_KEY);
                 const inputPassword = document.getElementById('password').value;
@@ -104,7 +119,7 @@
 
                 if (inputPassword === storedPassword) {
                     document.getElementById('login-container').style.display = 'none';
-                    document.getElementById('content').style.display = 'block';
+                    showContent();
                 } else {
                     errorMessage.style.display = 'block';
                 }
@@ -115,15 +130,15 @@
                 if (newPassword) {
                     localStorage.setItem(PASSWORD_KEY, newPassword);
                     document.getElementById('setup-container').style.display = 'none';
-                    document.getElementById('login-container').style.display = 'block';
+                    showContent();
                 }
             }
 
             window.onload = function() {
                 if (localStorage.getItem(PASSWORD_KEY)) {
-                    document.getElementById('login-container').style.display = 'block';
+                    showLogin();
                 } else {
-                    document.getElementById('setup-container').style.display = 'block';
+                    showSetup();
                 }
             };
 
