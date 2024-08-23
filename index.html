@@ -14,6 +14,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            height: 100vh;
         }
         #content {
             display: grid;
@@ -100,7 +101,20 @@
     </style>
 </head>
 <body>
-    <div id="content">
+    <div id="setup-container">
+        <h2>Imposta la tua password</h2>
+        <input type="password" id="new-password" placeholder="Nuova password">
+        <button onclick="setPassword()">Imposta Password</button>
+    </div>
+
+    <div id="login-container" style="display:none;">
+        <h2>Inserisci la password</h2>
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="checkPassword()">Accedi</button>
+        <p id="error-message" style="color: red; display: none;">Password errata. Riprova.</p>
+    </div>
+
+    <div id="content" style="display:none;">
         <div class="iframe-container">
             <iframe src="https://www.google.com"></iframe>
         </div>
@@ -115,13 +129,50 @@
         </div>
     </div>
 
-    <div class="edit-controls" id="edit-controls">
+    <div class="edit-controls" id="edit-controls" style="display:none;">
         <input type="text" id="link-name" placeholder="Nome del sito">
         <input type="url" id="link-url" placeholder="URL del sito">
         <button onclick="addIframe()">Aggiungi Pagina</button>
     </div>
 
     <script>
+        const PASSWORD_KEY = 'pagePassword';
+
+        function showSetup() {
+            document.getElementById('setup-container').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('login-container').style.display = 'block';
+        }
+
+        function showContent() {
+            document.getElementById('content').style.display = 'grid';
+            document.getElementById('edit-controls').style.display = 'block';
+        }
+
+        function checkPassword() {
+            const storedPassword = localStorage.getItem(PASSWORD_KEY);
+            const inputPassword = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (inputPassword === storedPassword) {
+                document.getElementById('login-container').style.display = 'none';
+                showContent();
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        function setPassword() {
+            const newPassword = document.getElementById('new-password').value;
+            if (newPassword) {
+                localStorage.setItem(PASSWORD_KEY, newPassword);
+                document.getElementById('setup-container').style.display = 'none';
+                showContent();
+            }
+        }
+
         function addIframe() {
             const name = document.getElementById('link-name').value;
             const url = document.getElementById('link-url').value;
@@ -142,6 +193,14 @@
                 document.getElementById('link-url').value = '';
             }
         }
+
+        window.onload = function() {
+            if (localStorage.getItem(PASSWORD_KEY)) {
+                showLogin();
+            } else {
+                showSetup();
+            }
+        };
     </script>
 </body>
 </html>
